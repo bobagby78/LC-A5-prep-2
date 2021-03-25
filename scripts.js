@@ -53,20 +53,56 @@ window.addEventListener("load", function() {
 // DOM code for page elements
 function init() {
 
-    // TODO: Establish variable to hold questions after they are returned from fetch request
-    
+    // Establish variable to hold questions after they are returned from fetch request
+    let questions = []; //this array will hold the questions to load to the page.
 
     // TODO: Establish variables for DOM objects representing HTML elements
-    
+    let numQuestions = document.getElementById("num-questions");
+    let category = document.getElementById("category");
+    let type = document.getElementById("type")
+    let difficulty = document.getElementById("difficulty")
+    let form = document.getElementById("form");
+    let questionArea = document.getElementById("question-area");
 
     // TODO: Write a function to populate the drop-down list of categories
-    
+    function listCategories(){
+        for(let i = 0; i < categories.length; i ++){
+            category.innerHTML += `
+            <option value = "${categories[i].id}">${categories[i].name}</option>
+            `
+        }
+    }
+    listCategories();
 
+    console.log(categories);
     // TODO: Write a function to build the URL with query parameters based on form submitted
+    function buildURL(){
+        let newURL = "https://opentdb.com/api.php?token=" + currentToken + "&amount=" + numQuestions.value
+        if (category.value !== "any"){
+            newURL += "&category=" + catergory.value;
+        }
+        if (type.value !== "any"){
+            newURL += "&type=" + type.value;
+        }
+        if (difficulty.value !== "any"){
+            newURL += "&difficulty =" + difficulty.value;
+        }
+        console.log(newURL);
+        return newURL;
+    }
     
 
     // TODO: Write a function to fetch new questions from trivia database
-    
+    function getQuestions(){
+        let url = buildURL();
+        fetch(url).then( function(response) {
+            response.json().then( function(json) {
+                questions = json.results;
+                console.log("new Q's received");
+                //call displayQuestions();
+        });
+    });
+    }
 
     // TODO: Write a function to shuffle correct and incorrect answers in an array for one question and return innerHTML
     
@@ -78,7 +114,12 @@ function init() {
     
 
     // TODO: Write a form-level listener for submission
-    
+    form.addEventListener("submit", function(event){
+        //validate
+        getQuestions();
+
+        event.preventDefault();
+    })
 
     // TODO: Write a document-level listener with an anonymous function to score a question
     
