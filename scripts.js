@@ -79,7 +79,7 @@ function init() {
     function buildURL(){
         let newURL = "https://opentdb.com/api.php?token=" + currentToken + "&amount=" + numQuestions.value
         if (category.value !== "any"){
-            newURL += "&category=" + catergory.value;
+            newURL += "&category=" + category.value;
         }
         if (type.value !== "any"){
             newURL += "&type=" + type.value;
@@ -105,10 +105,25 @@ function init() {
     }
 
     // TODO: Write a function to shuffle correct and incorrect answers in an array for one question and return innerHTML
-    
+    function getAnswerOptions(qIndex){
+        let answers = [questions[qIndex].correct_answer].concat(questions[qIndex].incorrect_answers);
+
+    }
 
     // TODO: Write a function to display the questions (see sample-question-code.html)
-    
+    function displayQuestions(){
+        let answers;
+        for (let i = 0; i < questions.length; i ++){
+            answers = getAnswerOptions(i)
+            questionArea.innerHTML = `
+            <div class = "q-container">Question ${i + 1} <span id = "score${i}" class = "score"></span></p>
+            <p class = "q-number">${questions[i].question}</p>
+            ${answers}
+            <p class = "q-info">${questions[i].category} &nbsp;&bull;&nbsp;${questions[i].difficulty}</p>
+            </div>
+            `
+        }
+    }
 
     // TODO: Write a function to reset the question area
     
